@@ -25,14 +25,23 @@ struct ContentView: View {
                 .scaleEffect(heartSizeChanged ? 1.0 : 0.5)
         }
         //.animation(.default, value: circleColorChanged)
-        .animation(.spring(response: 0.3, dampingFraction: 0.3, blendDuration: 0.3) ,value: heartSizeChanged)
+       // .animation(.spring(response: 0.3, dampingFraction: 0.3, blendDuration: 0.3) ,value: heartSizeChanged)
 
-        .animation(.default, value: circleColorChanged)
+        //.animation(.default, value: circleColorChanged)
 
         .onTapGesture {
-            circleColorChanged.toggle()
+//            withAnimation(.default) {
+//                circleColorChanged.toggle()
+//                heartColorChanged.toggle()
+//                heartSizeChanged.toggle()
+//            }
+            
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.3, blendDuration: 0.3)){
+                circleColorChanged.toggle()
+                heartSizeChanged.toggle()
+            }
             heartColorChanged.toggle()
-            heartSizeChanged.toggle()
+            
         }
 
     }
