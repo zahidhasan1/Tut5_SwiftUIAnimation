@@ -13,10 +13,13 @@ struct ContentView: View {
     @State private var heartColorChanged = false
     @State private var heartSizeChanged = false
     @State private var isLoading = false
+    @State private var progress: CGFloat = 0.0
     var body: some View {
         VStack {
             HeartFillAnimation(circleColorChanged: $circleColorChanged, heartColorChanged: $heartColorChanged, heartSizeChanged: $heartSizeChanged)
             CircleLoaderAnimation(isLoading: $isLoading)
+            CircularProgressIndicator(progress: $progress)
+                .padding()
         }
 
     }
@@ -84,8 +87,36 @@ struct CircleLoaderAnimation: View{
                 //.animation(.default.repeatForever(autoreverses: false), value: isLoading)
                 .animation(.linear(duration: 0.5).repeatForever(autoreverses: false), value: isLoading)
                 .onAppear(){
-                    isLoading = true
+                    isLoading = false
             }
         }
+    }
+}
+
+struct CircularProgressIndicator: View{
+    @Binding var progress: CGFloat
+    var body: some View{
+        ZStack{
+            Text("\(Int(progress * 100))%")
+                .font(.system(.title, design: .rounded, weight: .bold))
+            
+            Circle()
+                .stroke( Color(.systemGray4), lineWidth: 20)
+                .frame(width: 150, height: 150)
+            Circle()
+                .trim(from: 0, to: progress)
+                .stroke(.green, lineWidth: 20)
+                .frame(width: 150, height: 150)
+                .rotationEffect(Angle(degrees: -90))
+                .onAppear(){
+                    Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
+                        self.progress += 0.05
+                        if self.progress >= 1.0{
+                            timer.invalidate()
+                        }
+                    }
+                }
+        }
+
     }
 }
