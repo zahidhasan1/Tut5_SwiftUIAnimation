@@ -71,15 +71,21 @@ struct HeartFillAnimation: View {
 struct CircleLoaderAnimation: View{
     @Binding var isLoading: Bool
     var body: some View{
-        Circle()
-            .trim(from: 0, to: 0.7)
-            .stroke(Color.green, lineWidth: 15)
-            .frame(width: 150, height: 150)
-            .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
-            //.animation(.default.repeatForever(autoreverses: false), value: isLoading)
-            .animation(.linear(duration: 0.5).repeatForever(autoreverses: false), value: isLoading)
-            .onAppear(){
-                isLoading = true
+        ZStack {
+            Circle()
+                .stroke(Color(.systemGray4), lineWidth: 20)
+                .frame(width: 150, height: 150)
+            
+            Circle()
+                .trim(from: 0, to: 0.3)
+                .stroke(Color.green, lineWidth: 12)
+                .frame(width: 150, height: 150)
+                .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
+                //.animation(.default.repeatForever(autoreverses: false), value: isLoading)
+                .animation(.linear(duration: 0.5).repeatForever(autoreverses: false), value: isLoading)
+                .onAppear(){
+                    isLoading = true
             }
+        }
     }
 }
