@@ -17,9 +17,12 @@ struct ContentView: View {
     var body: some View {
         VStack {
             HeartFillAnimation(circleColorChanged: $circleColorChanged, heartColorChanged: $heartColorChanged, heartSizeChanged: $heartSizeChanged)
+                .padding()
             CircleLoaderAnimation(isLoading: $isLoading)
+                .padding()
             CircularProgressIndicator(progress: $progress)
                 .padding()
+            Spacer()
         }
 
     }
@@ -40,13 +43,13 @@ struct HeartFillAnimation: View {
     var body: some View {
         ZStack {
             Circle()
-                .frame(width: 200, height: 200)
+                .frame(width: 150, height: 150)
                 .foregroundColor(circleColorChanged ? Color(.systemGray) : .red)
             
             
             Image(systemName: "heart.fill")
                 .foregroundColor(heartColorChanged ? .red : .white)
-                .font(.system(size: 100))
+                .font(.system(size: 80))
                 .scaleEffect(heartSizeChanged ? 1.0 : 0.5)
         }
         //.animation(.default, value: circleColorChanged)
