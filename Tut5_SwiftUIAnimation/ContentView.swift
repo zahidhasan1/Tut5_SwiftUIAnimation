@@ -14,13 +14,17 @@ struct ContentView: View {
     @State private var heartSizeChanged = false
     @State private var isLoading = false
     @State private var progress: CGFloat = 0.0
+    
     var body: some View {
         VStack {
             HeartFillAnimation(circleColorChanged: $circleColorChanged, heartColorChanged: $heartColorChanged, heartSizeChanged: $heartSizeChanged)
                 .padding()
-            CircleLoaderAnimation(isLoading: $isLoading)
-                .padding()
-            CircularProgressIndicator(progress: $progress)
+//            CircleLoaderAnimation(isLoading: $isLoading)
+//                .padding()
+//            CircularProgressIndicator(progress: $progress)
+//                .padding()
+            
+            BarLoadingAnimation(isLoading: $isLoading)
                 .padding()
             Spacer()
         }
@@ -121,5 +125,35 @@ struct CircularProgressIndicator: View{
                 }
         }
 
+    }
+}
+
+struct BarLoadingAnimation: View{
+    @Binding var isLoading: Bool
+    var body: some View{
+        ZStack{
+            Text("Loading").font(.system(.title, weight: .bold))
+                .foregroundColor(.accentColor)
+                .offset(y:-25)
+            RoundedRectangle(cornerRadius: 3)
+                .stroke(Color(.systemGray5), lineWidth: 3)
+                .frame(width: 250,height: 3)
+            
+//            RoundedRectangle(cornerRadius: 3)
+//            .stroke(Color(.systemGray5), lineWidth: 3)
+//            .frame(width: 250, height: 3)
+            
+            
+            RoundedRectangle(cornerRadius: 3)
+                .stroke(Color.accentColor, lineWidth: 3)
+                .frame(width: 30, height: 3)
+                .offset(x: isLoading ? 110 : -110, y: 0)
+                .animation(.linear(duration: 0.5).repeatForever(autoreverses: false), value: isLoading)
+                .onAppear(){
+                    isLoading = true
+                }
+            
+
+        }
     }
 }
