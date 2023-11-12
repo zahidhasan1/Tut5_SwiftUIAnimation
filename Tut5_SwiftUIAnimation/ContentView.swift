@@ -24,8 +24,10 @@ struct ContentView: View {
 //            CircularProgressIndicator(progress: $progress)
 //                .padding()
             
-            BarLoadingAnimation(isLoading: $isLoading)
-                .padding()
+            //BarLoadingAnimation(isLoading: $isLoading)
+               // .padding()
+            
+            DotAnimation(isLoading: $isLoading)
             Spacer()
         }
 
@@ -150,10 +152,28 @@ struct BarLoadingAnimation: View{
                 .offset(x: isLoading ? 110 : -110, y: 0)
                 .animation(.linear(duration: 0.5).repeatForever(autoreverses: false), value: isLoading)
                 .onAppear(){
-                    isLoading = true
+                    isLoading = false
                 }
             
 
+        }
+    }
+}
+
+struct DotAnimation: View{
+    @Binding var isLoading: Bool
+    var body: some View{
+        HStack{
+            ForEach(0...4, id: \.self) { index in
+                Circle()
+                    .frame(width: 10,height: 10)
+                    .foregroundColor(.green)
+                    .scaleEffect(self.isLoading ? 0 : 1.5)
+                    .animation(.linear(duration: 0.8).repeatForever().delay(0.3 * Double(index)), value: isLoading)
+            }
+        }
+        .onAppear(){
+            isLoading = false
         }
     }
 }
