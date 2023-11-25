@@ -15,6 +15,10 @@ struct ContentView: View {
     @State private var isLoading = false
     @State private var progress: CGFloat = 0.0
     
+    //MARK: TransformingRectangleIntoCircle ANimation
+    @State private var recordBegin = false
+    @State private var recording = false
+    
     var body: some View {
         VStack {
             HeartFillAnimation(circleColorChanged: $circleColorChanged, heartColorChanged: $heartColorChanged, heartSizeChanged: $heartSizeChanged)
@@ -27,7 +31,9 @@ struct ContentView: View {
             //BarLoadingAnimation(isLoading: $isLoading)
                // .padding()
             
-            DotAnimation(isLoading: $isLoading)
+           // DotAnimation(isLoading: $isLoading)
+            
+            TransformingRectangleIntoCircleAnimation(recordBegin: $recordBegin, recording: $recording)
             Spacer()
         }
 
@@ -41,7 +47,6 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 struct HeartFillAnimation: View {
-    
     @Binding var circleColorChanged: Bool
     @Binding var heartColorChanged: Bool
     @Binding var heartSizeChanged: Bool
@@ -173,7 +178,41 @@ struct DotAnimation: View{
             }
         }
         .onAppear(){
-            isLoading = false
+            isLoading = true
+        }
+    }
+}
+
+struct TransformingRectangleIntoCircleAnimation: View{
+    @Binding var recordBegin: Bool
+    @Binding var recording: Bool
+    
+    var body: some View{
+        
+        ZStack{
+            RoundedRectangle(cornerRadius: recordBegin ? 30 : 5)
+                .frame(width: recordBegin ? 60 : 250, height: 60)
+                .foregroundColor(recordBegin ? .red : .green)
+                .overlay(
+                    Image(systemName: "mic.fill")
+                        .font(.system(.title))
+                        .foregroundColor(.white)
+                        .scaleEffect(recording ? 0.7 : 1)
+                )
+            RoundedRectangle(cornerRadius: recordBegin ? 35: 10)
+                .trim(from: 0, to: recordBegin ? 0.001 : 1.0)
+                .stroke(lineWidth: 5)
+                .frame(width: recordBegin ? 70 : 260, height: 70)
+                .foregroundColor(recordBegin ? .red : .green)
+        }
+        .onTapGesture {
+            withAnimation(Animation.spring()){
+                self.recordBegin.toggle()
+            }
+            
+            withAnimation(Animation.spring().repeatForever().delay(0.5)){
+                self.recording.toggle()
+            }
         }
     }
 }
